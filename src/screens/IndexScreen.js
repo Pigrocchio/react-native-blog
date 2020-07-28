@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,8 +15,20 @@ import { Context } from "../context/BlogContext";
 const IndexScreen = () => {
   const navigation = useNavigation();
 
-  const { state, deleteBlogPost } = useContext(Context);
+  const { state, deleteBlogPost, getBlogPost } = useContext(Context);
 
+  useEffect(() => {
+    getBlogPost()
+
+    const listner = navigation.addListener('focus', () => {
+      getBlogPost();
+    });
+
+    return () => {
+      listner.remove()
+      //invoked when instance of componet is unmounted
+    }
+  }, [])
   
   navigation.setOptions({
     title: "Index",
